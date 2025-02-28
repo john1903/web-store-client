@@ -23,7 +23,7 @@ async function onSubmit() {
     const response = await signup(userRequest);
     if (response.ok) {
       toast.success("Successfully signed up");
-      await router.push("/login");
+      await router.push({ name: "login" });
     } else {
       toast.error(response.error.message);
     }
@@ -41,7 +41,7 @@ async function onSubmit() {
     <div>
       <div class="text-center mb-4">
         <h2 class="fw-bold">Create Account</h2>
-        <p class="text-muted">Register to continue</p>
+        <p class="text-muted">Sign up to continue</p>
       </div>
       <form @submit.prevent="onSubmit">
         <div class="mb-3">

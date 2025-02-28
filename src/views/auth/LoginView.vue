@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-
 import { useToast } from "vue-toastification";
 import { LoginRequest } from "@/types/security/login";
 import { login } from "@/api/authenticationApi";
+import { setToken, getExpiry } from "@/utils/security";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 
 const router = useRouter();
@@ -23,7 +23,8 @@ async function onSubmit() {
     const response = await login(loginRequest);
     if (response.ok) {
       toast.success("Successfully logged in");
-      await router.push("/");
+      setToken(response.data, getExpiry(response.data));
+      await router.push({ name: "home" });
     } else {
       toast.error("Invalid credentials");
     }
@@ -91,7 +92,7 @@ async function onSubmit() {
       </form>
       <div class="text-center mt-3">
         <RouterLink to="/signup" class="small text-decoration-none">
-          Don't have an account? Register
+          Don't have an account? Sign up
         </RouterLink>
       </div>
     </div>
