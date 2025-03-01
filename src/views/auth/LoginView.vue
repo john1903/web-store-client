@@ -94,6 +94,11 @@ async function onSubmit() {
         <RouterLink to="/signup" class="small text-decoration-none">
           Don't have an account? Sign up
         </RouterLink>
+        <div class="mt-1">
+          <RouterLink to="/" class="small text-decoration-none">
+            Back to home
+          </RouterLink>
+        </div>
       </div>
     </div>
   </AuthLayout>
