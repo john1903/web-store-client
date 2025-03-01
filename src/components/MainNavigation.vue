@@ -32,18 +32,20 @@ const handleSearch = () => {
           <ul
             class="navbar-nav d-flex flex-column flex-sm-row align-items-center justify-content-center gap-1 gap-sm-5"
           >
+            <RouterLink to="/" class="nav-link text-uppercase text-dark">
+              Home
+            </RouterLink>
             <li class="nav-item">
-              <a class="nav-link text-uppercase text-dark" href="#">Men</a>
+              <a class="nav-link text-uppercase text-dark" href="#">Products</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase text-dark" href="#">Women</a>
+              <a class="nav-link text-uppercase text-dark" href="#"
+                >Recommended</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase text-dark" href="#">Kids</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-uppercase text-danger fw-bold" href="#"
-                >Sale</a
+              <a class="nav-link text-uppercase text-dark" href="#"
+                >Contact us</a
               >
             </li>
           </ul>

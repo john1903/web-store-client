@@ -1,12 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div
-    id="carouselExampleSlidesOnly"
-    class="carousel slide"
-    data-bs-ride="carousel"
-    data-bs-interval="3000"
-  >
+  <div class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img class="d-block" src="/carousel/img-1.jpg" alt="First slide" />
