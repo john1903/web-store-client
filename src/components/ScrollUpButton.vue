@@ -50,13 +50,13 @@ onUnmounted(() => {
 
 .btn-white-outline {
   background-color: #ffffff;
-  border: 2px solid #bababa;
+  border: 1px solid #a6a6a6;
   color: #333;
 }
 
 .btn-white-outline:hover {
   background-color: #f8f9fa;
-  border-color: #999;
+  border-color: #686868;
 }
 
 .scroll-top {

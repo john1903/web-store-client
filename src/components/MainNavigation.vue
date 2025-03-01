@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { hasRole } from "@/common/commonImports";
 
 const isNavCollapsed = ref(true);
 const toggleNav = () => {
@@ -70,7 +71,14 @@ const handleSearch = () => {
             <button class="btn btn-link text-dark" aria-label="My account">
               <i class="bi bi-person fs-5"></i>
             </button>
-            <button class="btn btn-link text-dark" aria-label="Cart">
+            <button
+              v-if="hasRole('ADMIN')"
+              class="btn btn-link text-dark"
+              aria-label="Edit"
+            >
+              <i class="bi bi-pencil-square"></i>
+            </button>
+            <button v-else class="btn btn-link text-dark" aria-label="Cart">
               <i class="bi bi-bag fs-5"></i>
             </button>
           </div>
