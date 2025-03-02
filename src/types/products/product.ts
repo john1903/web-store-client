@@ -2,6 +2,7 @@ import { Category } from "@/types/categories/category";
 
 export interface Product {
   id: number;
+  imageUrl: string;
   name: string;
   description: string;
   price: number;

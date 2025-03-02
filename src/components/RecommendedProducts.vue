@@ -12,7 +12,7 @@ onMounted(async () => {
   try {
     const response = await fetchProducts(
       { page: 0, size: 4 },
-      { categoryId: 1 }
+      { categoryId: 5 }
     );
     if (response.ok) {
       products.value = response.data.content;
@@ -35,7 +35,7 @@ function addToCart(product: Product) {
       <div v-for="product in products" :key="product.id" class="col">
         <div class="card h-100 text-start modern-card">
           <img
-            src="/products/img-1.jpg"
+            :src="product.imageUrl"
             :alt="product.name"
             class="card-img-top modern-img"
           />

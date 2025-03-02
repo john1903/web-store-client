@@ -31,7 +31,7 @@ onMounted(async () => {
       >
         <div class="card h-100 text-center modern-card overlay-card">
           <img
-            src="/categories/img-1.jpg"
+            :src="category.imageUrl"
             :alt="category.name"
             class="card-img-top modern-img"
           />
@@ -49,7 +49,7 @@ onMounted(async () => {
       >
         <div class="card h-100 text-center modern-card overlay-card">
           <img
-            src="/categories/img-1.jpg"
+            :src="category.imageUrl"
             :alt="category.name"
             class="card-img-top modern-img"
           />
