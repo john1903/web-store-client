@@ -9,7 +9,7 @@ const emit = defineEmits<{
 
 const productFilters = ref<ProductFilters>({
   categoryId: undefined,
-  name: "",
+  name: undefined,
   priceFrom: undefined,
   priceTo: undefined,
 });

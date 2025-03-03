@@ -5,11 +5,12 @@ import type { Category } from "@/types/categories/category";
 
 const props = defineProps<{
   categories: Category[];
+  filters?: ProductFilters;
 }>();
 
 const productFilters = ref<ProductFilters>({
   categoryId: undefined,
-  name: "",
+  name: undefined,
   priceFrom: undefined,
   priceTo: undefined,
 });
@@ -25,7 +26,7 @@ function applyFilters() {
 function resetFilters() {
   productFilters.value = {
     categoryId: undefined,
-    name: "",
+    name: undefined,
     priceFrom: undefined,
     priceTo: undefined,
   };

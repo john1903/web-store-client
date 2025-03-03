@@ -7,13 +7,27 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "home",
     component: HomeView,
-    meta: { breadcrumb: "Home" },
   },
   {
     path: "/products",
     name: "products",
     component: () => import("@/views/ProductsView.vue"),
-    meta: { breadcrumb: "Products" },
+    props: (route) => ({
+      paginationParams: {
+        page: route.query.page ? Number(route.query.page) - 1 : undefined,
+        size: route.query.size ? Number(route.query.size) : 12,
+      },
+      productsFilters: {
+        categoryId: route.query.categoryId
+          ? Number(route.query.categoryId)
+          : undefined,
+        name: route.query.name ? String(route.query.name) : undefined,
+        priceFrom: route.query.priceFrom
+          ? Number(route.query.priceFrom)
+          : undefined,
+        priceTo: route.query.priceTo ? Number(route.query.priceTo) : undefined,
+      },
+    }),
   },
   {
     path: "/login",

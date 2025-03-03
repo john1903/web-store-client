@@ -21,21 +21,22 @@ function handleAddToCart(product: Product) {
 
 onMounted(async () => {
   try {
-    const response = await fetchProducts({ page: 0, size: 5 });
-    if (response.ok) {
-      products.value = response.data.content;
+    const [productsResponse, categoriesResponse] = await Promise.all([
+      fetchProducts({ page: 0, size: 5 }, { categoryId: 5 }),
+      fetchCategories({ page: 0, size: 5 }),
+    ]);
+    if (productsResponse.ok) {
+      products.value = productsResponse.data.content;
+    } else {
+      toast.error("Error fetching products");
+    }
+    if (categoriesResponse.ok) {
+      categories.value = categoriesResponse.data.content;
+    } else {
+      toast.error("Error fetching categories");
     }
   } catch (error) {
-    toast.error("Error fetching products");
-    console.error(error);
-  }
-  try {
-    const response = await fetchCategories({ page: 0, size: 5 });
-    if (response.ok) {
-      categories.value = response.data.content;
-    }
-  } catch (error) {
-    toast.error("Error fetching categories");
+    toast.error("Error fetching data");
     console.error(error);
   }
 });
@@ -47,6 +48,7 @@ onMounted(async () => {
     <CategoryTiles class="mb-4" :categories="categories" />
     <ProductsRow
       class="mb-4"
+      :title="'This Week Top Sales'"
       :products="products"
       @addToCart="handleAddToCart"
     />
