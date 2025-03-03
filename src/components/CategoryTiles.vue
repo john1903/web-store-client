@@ -1,24 +1,10 @@
 <script setup lang="ts">
+import { defineProps } from "vue";
 import { Category } from "@/types/categories/category";
-import { fetchCategories } from "@/api/categoryApi";
-import { onMounted, ref } from "vue";
-import { useToast } from "vue-toastification";
 
-const toast = useToast();
-
-const categories = ref<Category[]>([]);
-
-onMounted(async () => {
-  try {
-    const response = await fetchCategories({ page: 0, size: 5 });
-    if (response.ok) {
-      categories.value = response.data.content;
-    }
-  } catch (error) {
-    toast.error("Error fetching categories");
-    console.error(error);
-  }
-});
+defineProps<{
+  categories: Category[];
+}>();
 </script>
 
 <template>
@@ -63,19 +49,6 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.modern-card {
-  border: none;
-  border-radius: 0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  overflow: hidden;
-  position: relative;
-}
-
-.modern-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-}
-
 .modern-img {
   border-radius: 0;
   height: 300px;

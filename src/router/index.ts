@@ -7,6 +7,13 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "home",
     component: HomeView,
+    meta: { breadcrumb: "Home" },
+  },
+  {
+    path: "/products",
+    name: "products",
+    component: () => import("@/views/ProductsView.vue"),
+    meta: { breadcrumb: "Products" },
   },
   {
     path: "/login",

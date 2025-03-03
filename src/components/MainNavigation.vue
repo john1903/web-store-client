@@ -1,6 +1,18 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
 import { hasRole } from "@/common/commonImports";
+import { ProductFilters } from "@/types/products/productFilters";
+
+const emit = defineEmits<{
+  (e: "filterChanged", filters: ProductFilters): void;
+}>();
+
+const productFilters = ref<ProductFilters>({
+  categoryId: undefined,
+  name: "",
+  priceFrom: undefined,
+  priceTo: undefined,
+});
 
 const isNavCollapsed = ref(true);
 const toggleNav = () => {
@@ -8,15 +20,18 @@ const toggleNav = () => {
 };
 
 const searchQuery = ref("");
-const handleSearch = () => {
-  console.log("Searching:", searchQuery.value);
-};
+function goSearch() {
+  emit("filterChanged", { ...productFilters.value, name: searchQuery.value });
+  searchQuery.value = "";
+}
 </script>
 
 <template>
   <nav class="navbar navbar-expand-lg border-bottom py-2">
     <div class="container-fluid d-flex align-items-center">
-      <a class="navbar-brand fw-bold text-dark m-0" href="#">MY BRAND</a>
+      <RouterLink to="/" class="navbar-brand fw-bold text-dark m-0">
+        MY BRAND
+      </RouterLink>
       <button
         class="navbar-toggler border-0"
         type="button"
@@ -36,26 +51,24 @@ const handleSearch = () => {
             <RouterLink to="/" class="nav-link text-uppercase text-dark">
               Home
             </RouterLink>
-            <li class="nav-item">
-              <a class="nav-link text-uppercase text-dark" href="#">Products</a>
-            </li>
+            <RouterLink
+              to="/products"
+              class="nav-link text-uppercase text-dark"
+            >
+              Products
+            </RouterLink>
             <li class="nav-item">
               <a class="nav-link text-uppercase text-dark" href="#"
                 >Recommended</a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase text-dark" href="#"
-                >Contact us</a
-              >
+              <a class="nav-link text-uppercase text-dark" href="#">About us</a>
             </li>
           </ul>
         </div>
         <div class="d-flex flex-column flex-sm-row align-items-center">
-          <form
-            class="d-flex align-items-center"
-            @submit.prevent="handleSearch"
-          >
+          <form class="d-flex align-items-center" @submit.prevent="goSearch">
             <input
               v-model="searchQuery"
               type="text"

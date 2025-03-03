@@ -1,0 +1,63 @@
+.modern-card {
+    border: none;
+    border-radius: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.modern-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.modern-img {
+    border-radius: 0;
+    height: 300px;
+    object-fit: cover;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.card-text {
+    font-size: 1rem;
+}
+
+.card-body {
+    background-color: #fff;
+}
+
+.add-to-cart-text {
+    color: red;
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.modern-card:hover .add-to-cart-text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.btn-minimal {
+    background: none;
+    color: #000;
+    border: 1px solid #000;
+    border-radius: 0;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-minimal:hover {
+    background: #000;
+    color: #fff;
+}
