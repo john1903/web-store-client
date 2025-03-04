@@ -16,20 +16,25 @@ function handleAddToCart(product: Product) {
 <template>
   <div class="row row-cols-1 row-cols-md-3 g-4">
     <div v-for="product in products" :key="product.id" class="col">
-      <div class="card h-100 text-start modern-card">
-        <img
-          :src="product.imageUrl"
-          :alt="product.name"
-          class="card-img-top modern-img"
-        />
-        <div class="card-body">
-          <h5 class="card-title">{{ product.name }}</h5>
-          <p class="card-text text-danger fw-bold">${{ product.price }}</p>
+      <RouterLink :to="`/products/${product.id}`" class="text-decoration-none">
+        <div class="card h-100 text-start modern-card">
+          <img
+            :src="product.imageUrl"
+            :alt="product.name"
+            class="card-img-top modern-img"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text text-danger fw-bold">${{ product.price }}</p>
+          </div>
+          <div
+            class="add-to-cart-text"
+            @click.stop.prevent="handleAddToCart(product)"
+          >
+            + Add To Cart
+          </div>
         </div>
-        <div class="add-to-cart-text" @click="handleAddToCart(product)">
-          + Add To Cart
-        </div>
-      </div>
+      </RouterLink>
     </div>
   </div>
 </template>

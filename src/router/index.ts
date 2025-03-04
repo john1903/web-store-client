@@ -11,7 +11,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/products",
     name: "products",
-    component: () => import("@/views/ProductsView.vue"),
+    component: () => import("@/views/products/ProductsView.vue"),
     props: (route) => ({
       paginationParams: {
         page: route.query.page ? Number(route.query.page) - 1 : undefined,
@@ -28,6 +28,19 @@ const routes: Array<RouteRecordRaw> = [
         priceTo: route.query.priceTo ? Number(route.query.priceTo) : undefined,
       },
     }),
+  },
+  {
+    path: "/products/:id",
+    name: "product",
+    component: () => import("@/views/products/ProductView.vue"),
+    props: (route) => ({
+      id: Number(route.params.id),
+    }),
+  },
+  {
+    path: "/about",
+    name: "about",
+    component: () => import("@/views/AboutView.vue"),
   },
   {
     path: "/login",

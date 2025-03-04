@@ -117,7 +117,19 @@ watch(
           />
         </div>
         <div class="col-md-9">
-          <ProductsGrid :products="products" @addToCart="handleAddToCart" />
+          <div
+            v-if="products.length === 0"
+            class="text-center py-5"
+            style="border: 1px solid #ddd"
+          >
+            <i class="bi bi-emoji-frown fs-1 text-dark"></i>
+            <p class="fw-bold">Nothing Found Here</p>
+          </div>
+          <ProductsGrid
+            v-else
+            :products="products"
+            @addToCart="handleAddToCart"
+          />
           <ItemsPagination
             :total-pages="totalProductPages"
             :size="props.paginationParams.size"

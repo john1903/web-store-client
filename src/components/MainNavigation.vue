@@ -70,7 +70,9 @@ function goSearch() {
               </RouterLink>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase text-dark" href="#">About us</a>
+              <RouterLink to="/about" class="nav-link text-uppercase text-dark">
+                About us
+              </RouterLink>
             </li>
           </ul>
         </div>
