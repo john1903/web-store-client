@@ -48,19 +48,26 @@ function goSearch() {
           <ul
             class="navbar-nav d-flex flex-column flex-sm-row align-items-center justify-content-center gap-1 gap-sm-5"
           >
-            <RouterLink to="/" class="nav-link text-uppercase text-dark">
-              Home
-            </RouterLink>
-            <RouterLink
-              to="/products"
-              class="nav-link text-uppercase text-dark"
-            >
-              Products
-            </RouterLink>
             <li class="nav-item">
-              <a class="nav-link text-uppercase text-dark" href="#"
-                >Recommended</a
+              <RouterLink to="/" class="nav-link text-uppercase text-dark">
+                Home
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink
+                to="/products"
+                class="nav-link text-uppercase text-dark"
               >
+                Products
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink
+                to="/products?categoryId=5"
+                class="nav-link text-uppercase text-dark"
+              >
+                Recommended
+              </RouterLink>
             </li>
             <li class="nav-item">
               <a class="nav-link text-uppercase text-dark" href="#">About us</a>

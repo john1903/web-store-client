@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import { ref, onMounted, defineProps, watch, computed } from "vue";
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
 import MainLayout from "@/layouts/MainLayout.vue";
 import BreadCrumb from "@/components/BreadCrumb.vue";
 import ProductsGrid from "@/components/ProductsGrid.vue";
-import { ref, onMounted, defineProps, watch } from "vue";
-import { useRouter } from "vue-router";
 import { fetchProducts } from "@/api/productApi";
 import { fetchCategories } from "@/api/categoryApi";
-import { useToast } from "vue-toastification";
 import { Product } from "@/types/products/product";
 import { Category } from "@/types/categories/category";
 import ProductsFilter from "@/components/ProductsFilter.vue";
@@ -21,11 +21,6 @@ const props = defineProps<{
   paginationParams: PaginationParams;
   productsFilters: ProductFilters;
 }>();
-
-const breadcrumbItems = ref([
-  { name: "Home", to: "/" },
-  { name: "Products", to: "/products" },
-]);
 
 const products = ref<Product[]>([]);
 const categories = ref<Category[]>([]);
@@ -54,8 +49,6 @@ async function fetchData() {
   }
 }
 
-onMounted(fetchData);
-
 async function handleAddToCart(product: Product) {
   alert(`Added to cart: ${product.name}`);
 }
@@ -82,23 +75,30 @@ async function handlePageChanged(paginationParams: PaginationParams) {
   });
 }
 
-watch(
-  () => props.paginationParams,
-  (newVal, oldVal) => {
-    if (newVal !== oldVal) {
-      fetchData();
+const breadcrumbItems = computed(() => {
+  const baseItems = [
+    { name: "Home", to: "/" },
+    { name: "Products", to: "/products" },
+  ];
+  if (props.productsFilters.categoryId) {
+    const category = categories.value.find(
+      (c) => c.id === props.productsFilters.categoryId
+    );
+    if (category) {
+      return [
+        ...baseItems,
+        { name: category.name, to: `/products?categoryId=${category.id}` },
+      ];
     }
-  },
-  { deep: true }
-);
+  }
+  return baseItems;
+});
+
+onMounted(fetchData);
 
 watch(
-  () => props.productsFilters,
-  (newVal, oldVal) => {
-    if (newVal !== oldVal) {
-      fetchData();
-    }
-  },
+  () => [props.paginationParams, props.productsFilters],
+  () => fetchData(),
   { deep: true }
 );
 </script>
@@ -112,7 +112,7 @@ watch(
         <div class="col-md-3">
           <ProductsFilter
             :categories="categories"
-            :filters="productsFilters"
+            :filters="props.productsFilters"
             @filterChanged="handleFilterChanged"
           />
         </div>
@@ -120,7 +120,7 @@ watch(
           <ProductsGrid :products="products" @addToCart="handleAddToCart" />
           <ItemsPagination
             :total-pages="totalProductPages"
-            :size="paginationParams.size"
+            :size="props.paginationParams.size"
             @pageChanged="handlePageChanged"
           />
         </div>

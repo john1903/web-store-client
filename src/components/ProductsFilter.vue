@@ -9,10 +9,10 @@ const props = defineProps<{
 }>();
 
 const productFilters = ref<ProductFilters>({
-  categoryId: undefined,
-  name: undefined,
-  priceFrom: undefined,
-  priceTo: undefined,
+  categoryId: props.filters?.categoryId ? props.filters.categoryId : "",
+  name: props.filters?.name,
+  priceFrom: props.filters?.priceFrom,
+  priceTo: props.filters?.priceTo,
 });
 
 const emit = defineEmits<{
@@ -43,7 +43,7 @@ function resetFilters() {
         id="categoryId"
         class="form-select"
       >
-        <option class="active" value="">Select category</option>
+        <option value="">Select category</option>
         <option
           v-for="category in props.categories"
           :key="category.id"

@@ -1,5 +1,5 @@
 export interface ProductFilters {
-  categoryId?: number;
+  categoryId?: number | string;
   name?: string;
   priceFrom?: number;
   priceTo?: number;

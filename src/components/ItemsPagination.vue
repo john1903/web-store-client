@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineProps, defineEmits } from "vue";
+import { ref, defineProps, defineEmits, watch, computed, onMounted } from "vue";
 import { PaginationParams } from "@/common/commonImports";
 
 const props = defineProps<{
@@ -13,19 +13,39 @@ const emit = defineEmits<{
 
 const currentPage = ref(1);
 
+const isPrevDisabled = computed(() => currentPage.value <= 1);
+const isNextDisabled = computed(() => currentPage.value >= props.totalPages);
+
 function prevPage() {
-  if (currentPage.value > 1) {
+  if (!isPrevDisabled.value) {
     currentPage.value--;
     emit("pageChanged", { page: currentPage.value, size: props.size });
   }
 }
 
 function nextPage() {
-  if (currentPage.value < props.totalPages) {
+  if (!isNextDisabled.value) {
     currentPage.value++;
     emit("pageChanged", { page: currentPage.value, size: props.size });
   }
 }
+
+onMounted(() => {
+  if (props.totalPages === 0) {
+    currentPage.value = 0;
+  }
+});
+
+watch(
+  () => props.totalPages,
+  (newTotal) => {
+    if (currentPage.value > newTotal) {
+      currentPage.value = newTotal;
+    } else {
+      currentPage.value = 1;
+    }
+  }
+);
 </script>
 
 <template>
@@ -34,17 +54,15 @@ function nextPage() {
   >
     <div
       class="arrow me-3"
-      :class="{ 'arrow-disabled': currentPage === 1 }"
+      :class="{ 'arrow-disabled': isPrevDisabled }"
       @click="prevPage"
     >
       <i class="bi bi-arrow-left"></i>
     </div>
-
     <span class="page-info"> Page {{ currentPage }} of {{ totalPages }} </span>
-
     <div
       class="arrow ms-3"
-      :class="{ 'arrow-disabled': currentPage >= Number(totalPages) }"
+      :class="{ 'arrow-disabled': isNextDisabled }"
       @click="nextPage"
     >
       <i class="bi bi-arrow-right"></i>

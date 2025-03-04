@@ -15,16 +15,21 @@ defineProps<{
         :key="category.id"
         class="col-12 col-md-4"
       >
-        <div class="card h-100 text-center modern-card overlay-card">
-          <img
-            :src="category.imageUrl"
-            :alt="category.name"
-            class="card-img-top modern-img"
-          />
-          <div class="dark-overlay">
-            <h5 class="text-uppercase overlay-title">{{ category.name }}</h5>
+        <RouterLink
+          :to="`/products?categoryId=${category.id}`"
+          class="text-decoration-none"
+        >
+          <div class="card h-100 text-center modern-card overlay-card">
+            <img
+              :src="category.imageUrl"
+              :alt="category.name"
+              class="card-img-top modern-img"
+            />
+            <div class="dark-overlay">
+              <h5 class="text-uppercase overlay-title">{{ category.name }}</h5>
+            </div>
           </div>
-        </div>
+        </RouterLink>
       </div>
     </div>
     <div class="row g-4">
@@ -33,16 +38,18 @@ defineProps<{
         :key="category.id"
         class="col-12 col-md-6"
       >
-        <div class="card h-100 text-center modern-card overlay-card">
-          <img
-            :src="category.imageUrl"
-            :alt="category.name"
-            class="card-img-top modern-img"
-          />
-          <div class="dark-overlay">
-            <h5 class="text-uppercase overlay-title">{{ category.name }}</h5>
+        <RouterLink :to="`/products?categoryId=${category.id}`">
+          <div class="card h-100 text-center modern-card overlay-card">
+            <img
+              :src="category.imageUrl"
+              :alt="category.name"
+              class="card-img-top modern-img"
+            />
+            <div class="dark-overlay">
+              <h5 class="text-uppercase overlay-title">{{ category.name }}</h5>
+            </div>
           </div>
-        </div>
+        </RouterLink>
       </div>
     </div>
   </div>

@@ -12,9 +12,12 @@ defineProps({
 <template>
   <div class="breadcrumb-custom" aria-label="breadcrumb">
     <span v-for="(item, index) in items" :key="index">
-      <RouterLink :to="item.to" custom v-slot="{ navigate, isActive }">
-        <a :class="{ active: isActive }" @click="navigate">{{ item.name }}</a>
-      </RouterLink>
+      <template v-if="index < items.length - 1">
+        <RouterLink :to="item.to">{{ item.name }}</RouterLink>
+      </template>
+      <template v-else>
+        <RouterLink :to="item.to" class="active">{{ item.name }}</RouterLink>
+      </template>
       <span v-if="index < items.length - 1" class="separator">
         <i class="bi bi-chevron-right"></i>
       </span>
