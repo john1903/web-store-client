@@ -5,8 +5,11 @@ import { fetchProduct } from "@/api/productApi";
 import MainLayout from "@/layouts/MainLayout.vue";
 import BreadCrumb from "@/components/BreadCrumb.vue";
 import { useToast } from "vue-toastification";
+import { useCart } from "@/services/CartService";
 
 const toast = useToast();
+const cartService = useCart();
+
 const props = defineProps<{ id: number }>();
 
 const breadcrumbItems = ref([
@@ -39,9 +42,18 @@ onMounted(async () => {
   }
 });
 
-function addToCart() {
+async function addToCart() {
   if (product.value) {
-    alert(`Added to cart: ${product.value.name} (Quantity: ${quantity.value})`);
+    try {
+      await cartService.addCartItem({
+        productId: product.value.id,
+        quantity: quantity.value,
+      });
+      toast.success("Product added to cart");
+    } catch (error) {
+      toast.error("Error adding product to cart");
+      console.error(error);
+    }
   }
 }
 

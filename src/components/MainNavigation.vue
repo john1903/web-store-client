@@ -100,9 +100,14 @@ function goSearch() {
             >
               <i class="bi bi-pencil-square"></i>
             </button>
-            <button v-else class="btn btn-link text-dark" aria-label="Cart">
+            <RouterLink
+              to="/cart"
+              v-else
+              class="btn btn-link text-dark"
+              aria-label="Cart"
+            >
               <i class="bi bi-bag fs-5"></i>
-            </button>
+            </RouterLink>
           </div>
         </div>
       </div>

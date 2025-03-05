@@ -35,7 +35,7 @@ function resetFilters() {
 </script>
 
 <template>
-  <div class="filters">
+  <div class="modern-border">
     <div class="mb-3">
       <label for="categoryId" class="form-label">Category</label>
       <select
@@ -90,10 +90,4 @@ function resetFilters() {
   </div>
 </template>
 
-<style scoped>
-.filters {
-  padding: 1rem;
-  border: 1px solid #ddd;
-  margin-bottom: 1rem;
-}
-</style>
+<style scoped></style>

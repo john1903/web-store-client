@@ -9,14 +9,22 @@ import { ref, onMounted } from "vue";
 import { useToast } from "vue-toastification";
 import { Product } from "@/types/products/product";
 import { Category } from "@/types/categories/category";
+import { CartService, useCart } from "@/services/CartService";
 
 const toast = useToast();
+const cartService: CartService = useCart();
 
 const products = ref<Product[]>([]);
 const categories = ref<Category[]>([]);
 
-function handleAddToCart(product: Product) {
-  alert(`Added to cart: ${product.name}`);
+async function handleAddToCart(product: Product) {
+  try {
+    await cartService.addCartItem({ productId: product.id, quantity: 1 });
+    toast.success("Product added to cart");
+  } catch (error) {
+    toast.error("Error adding product to cart");
+    console.error(error);
+  }
 }
 
 onMounted(async () => {

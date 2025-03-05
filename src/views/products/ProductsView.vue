@@ -13,9 +13,11 @@ import ProductsFilter from "@/components/ProductsFilter.vue";
 import ItemsPagination from "@/components/ItemsPagination.vue";
 import { ProductFilters } from "@/types/products/productFilters";
 import { PaginationParams } from "@/types/common/paginationParams";
+import { useCart } from "@/services/CartService";
 
 const toast = useToast();
 const router = useRouter();
+const cartService = useCart();
 
 const props = defineProps<{
   paginationParams: PaginationParams;
@@ -50,7 +52,13 @@ async function fetchData() {
 }
 
 async function handleAddToCart(product: Product) {
-  alert(`Added to cart: ${product.name}`);
+  try {
+    await cartService.addCartItem({ productId: product.id, quantity: 1 });
+    toast.success("Product added to cart");
+  } catch (error) {
+    toast.error("Error adding product to cart");
+    console.error(error);
+  }
 }
 
 async function handleFilterChanged(productFilters: ProductFilters) {
@@ -119,8 +127,7 @@ watch(
         <div class="col-md-9">
           <div
             v-if="products.length === 0"
-            class="text-center py-5"
-            style="border: 1px solid #ddd"
+            class="text-center modern-border py-5"
           >
             <i class="bi bi-emoji-frown fs-1 text-dark"></i>
             <p class="fw-bold">Nothing Found Here</p>
