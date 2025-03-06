@@ -3,8 +3,10 @@ import { BearerToken } from "@/types/security/bearerToken";
 import { ApiError } from "@/types/exceptions/apiError";
 import { Result } from "@/types/common/result";
 
+const BASE_URL = process.env.VUE_APP_API_URL || "http://localhost:3000";
+
 const axiosInstance = axios.create({
-  baseURL: "http://64.226.119.119:3000/api",
+  baseURL: `${BASE_URL}/api`,
 });
 
 export function getAuthHeaders(bearerToken: BearerToken) {
