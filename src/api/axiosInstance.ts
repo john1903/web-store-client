@@ -4,7 +4,7 @@ import { ApiError } from "@/types/exceptions/apiError";
 import { Result } from "@/types/common/result";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: "http://64.226.119.119:3000/api",
 });
 
 export function getAuthHeaders(bearerToken: BearerToken) {

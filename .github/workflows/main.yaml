@@ -1,0 +1,73 @@
+name: CI/CD Web Store Client
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build and Deploy Docker Image
+    runs-on: ubuntu-latest
+    outputs:
+      TIMESTAMP: ${{ steps.set_timestamp.outputs.timestamp }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4.2.0
+        with:
+          node-version: '23.6.0'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Vue App
+        run: npm run build
+
+      - name: Set timestamp
+        id: set_timestamp
+        run: |
+          timestamp=$(date '+%Y-%m-%d-%H%M%S')
+          echo "TIMESTAMP=$timestamp" >> $GITHUB_ENV
+          echo "::set-output name=timestamp::$timestamp"
+
+      - name: Build Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: false
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/web-store-client:${{ env.TIMESTAMP }}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Push Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/web-store-client:${{ env.TIMESTAMP }}
+
+  deploy:
+    name: Deploy to Ubuntu Linux Server
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image from Docker Hub
+        run: docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/web-store-client:${{ needs.build.outputs.TIMESTAMP }}
+
+      - name: Delete existing Docker container
+        run: docker rm -f web-store-client-container
+
+      - name: Run Docker container
+        run: docker run -d --name web-store-client-container -p 80:80 ${{ secrets.DOCKER_HUB_USERNAME }}/web-store-client:${{ needs.build.outputs.TIMESTAMP }}
+
+      - name: Prune Docker Images
+        run: docker image prune -a -f
