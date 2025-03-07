@@ -68,18 +68,17 @@
     color: #fff;
 }
 
-.btn-minimal-accept {
-    background: none;
-    color: #000;
-    border: 1px solid #000;
-    border-radius: 0;
+.btn-minimal-2 {
     padding: 0.5rem 1rem;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    cursor: pointer;
+    border-radius: 0;
 }
 
-.btn-minimal-accept:hover {
-    background: #09470b;
-    color: #fff;
+.btn-minimal-2:hover {
+    background-color: #f0f0f0;
+}
+
+.quantity-display {
+    font-size: 1rem;
+    min-width: 2rem;
+    text-align: center;
 }

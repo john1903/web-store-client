@@ -15,6 +15,9 @@ const cart = ref<Cart>({
   total: 0,
 });
 
+const editingItemId = ref<number | null>(null);
+const quantity = ref<number | null>(null);
+
 async function getCart() {
   try {
     cart.value = await cartService.getCart();
@@ -33,6 +36,57 @@ async function handleEmptyCart() {
     console.error(error);
   }
   await getCart();
+}
+
+function handleEditItem(id: number) {
+  const item = cart.value.items.find((item) => item.id === id);
+  quantity.value = item ? item.quantity : null;
+  editingItemId.value = id;
+}
+
+async function handleSaveChanges() {
+  quantity.value = null;
+  editingItemId.value = null;
+  try {
+    await cartService.updateCart({
+      items: cart.value.items.map((item) => ({
+        id: item.id,
+        productId: item.product.id,
+        quantity: item.quantity,
+      })),
+    });
+    toast.success("Changes saved");
+  } catch (error) {
+    toast.error("Error saving cart");
+  }
+  await getCart();
+}
+
+function handleCancelEditing() {
+  toast.info("Editing canceled");
+  editingItemId.value = null;
+  quantity.value = null;
+}
+
+function handleIncrease(itemId: number) {
+  const item = cart.value.items.find((i) => i.id === itemId);
+  if (item) {
+    item.quantity++;
+    quantity.value = item.quantity;
+  }
+}
+
+function handleDecrease(itemId: number) {
+  const item = cart.value.items.find((i) => i.id === itemId);
+  if (item && item.quantity > 1) {
+    item.quantity--;
+    quantity.value = item.quantity;
+  }
+}
+
+async function handleRemoveItem(id: number) {
+  cart.value.items = cart.value.items.filter((i) => i.id !== id);
+  await handleSaveChanges();
 }
 
 onMounted(async () => {
@@ -58,44 +112,78 @@ onMounted(async () => {
             :key="item.id"
             class="card modern-card mb-3"
           >
-            <div class="row g-0">
-              <div class="col-md-4 p-0">
-                <img
-                  :src="item.product.imageUrl"
-                  :alt="item.product.name"
-                  class="fill-column"
-                />
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">
-                    {{ item.product.name }}
-                  </h5>
-                  <p class="card-text">{{ item.product.description }}</p>
-                  <p class="card-text text-danger fw-bold">
-                    {{ item.quantity }}
-                    <span>
-                      <i class="bi bi-x" />
-                    </span>
-                    ${{ item.product.price }}
-                  </p>
-                  <div class="d-flex gap-2">
-                    <button class="btn">
-                      <span class="me-2">
-                        <i class="bi bi-pencil"></i>
-                      </span>
-                      Edit
-                    </button>
-                    <button class="btn">
-                      <span class="me-2">
-                        <i class="bi bi-x-lg"></i>
-                      </span>
-                      Remove
-                    </button>
+            <RouterLink
+              :to="`/products/${item.product.id}`"
+              class="text-decoration-none text-dark"
+            >
+              <div class="row g-0">
+                <div class="col-md-4 p-0">
+                  <img
+                    :src="item.product.imageUrl"
+                    :alt="item.product.name"
+                    class="fill-column"
+                  />
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ item.product.name }}</h5>
+                    <p class="card-text">{{ item.product.description }}</p>
+                    <p class="card-text text-danger fw-bold">
+                      {{ item.quantity }}
+                      <span><i class="bi bi-x" /></span>
+                      ${{ item.product.price }}
+                    </p>
+                    <div class="d-flex gap-2">
+                      <template v-if="editingItemId !== item.id">
+                        <button
+                          class="btn btn-minimal-2"
+                          @click.stop.prevent="handleEditItem(item.id)"
+                        >
+                          <span class="me-2"><i class="bi bi-pencil"></i></span>
+                          Edit
+                        </button>
+                        <button
+                          class="btn btn-minimal-2"
+                          @click.stop.prevent="handleRemoveItem(item.id)"
+                        >
+                          <span class="me-2"><i class="bi bi-x-lg"></i></span>
+                          Remove
+                        </button>
+                      </template>
+                      <template v-else>
+                        <div class="quantity-display">
+                          <button
+                            class="btn btn-minimal-2"
+                            @click.stop.prevent="handleDecrease(item.id)"
+                          >
+                            <i class="bi bi-dash-lg"></i>
+                          </button>
+                          <span class="mx-1">{{ quantity }}</span>
+                          <button
+                            class="btn btn-minimal-2"
+                            @click.stop.prevent="handleIncrease(item.id)"
+                          >
+                            <i class="bi bi-plus-lg"></i>
+                          </button>
+                        </div>
+                        <button
+                          class="btn btn-minimal"
+                          @click.stop.prevent="handleSaveChanges"
+                        >
+                          Save
+                        </button>
+                        <button
+                          class="btn btn-minimal"
+                          @click.stop.prevent="handleCancelEditing"
+                        >
+                          Cancel
+                        </button>
+                      </template>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </RouterLink>
           </div>
         </div>
         <div class="col-md-4">
@@ -125,17 +213,8 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.modern-card {
-  max-height: 250px;
-}
-
-.btn {
-  padding: 0.5rem 1rem;
-  border-radius: 0;
-}
-
-.btn:hover {
-  background-color: #f0f0f0;
+.modern-card img {
+  max-height: 25vh;
 }
 
 .fill-column {

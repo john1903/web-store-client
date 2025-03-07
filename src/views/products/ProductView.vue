@@ -86,11 +86,11 @@ function decreaseQuantity() {
           <p>{{ product.description }}</p>
           <div class="d-flex align-items-center mt-3">
             <div class="quantity-display">
-              <button class="btn" @click="decreaseQuantity">
+              <button class="btn btn-minimal-2" @click="decreaseQuantity">
                 <i class="bi bi-dash-lg"></i>
               </button>
               <span class="mx-1">{{ quantity }}</span>
-              <button class="btn" @click="increaseQuantity">
+              <button class="btn btn-minimal-2" @click="increaseQuantity">
                 <i class="bi bi-plus-lg"></i>
               </button>
             </div>
@@ -104,19 +104,4 @@ function decreaseQuantity() {
   </MainLayout>
 </template>
 
-<style scoped>
-.quantity-display {
-  font-size: 1rem;
-  min-width: 2rem;
-  text-align: center;
-}
-
-.btn {
-  padding: 0.5rem 1rem;
-  border-radius: 0;
-}
-
-.btn:hover {
-  background-color: #f0f0f0;
-}
-</style>
+<style scoped></style>
