@@ -90,9 +90,13 @@ function goSearch() {
             </button>
           </form>
           <div class="d-flex">
-            <button class="btn btn-link text-dark" aria-label="My account">
+            <RouterLink
+              to="/account"
+              class="btn btn-link text-dark"
+              aria-label="My account"
+            >
               <i class="bi bi-person fs-5"></i>
-            </button>
+            </RouterLink>
             <button
               v-if="hasRole('ADMIN')"
               class="btn btn-link text-dark"
