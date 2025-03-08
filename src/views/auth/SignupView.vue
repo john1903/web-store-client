@@ -68,7 +68,7 @@ async function onSubmit() {
               <i class="bi bi-telephone"></i>
             </span>
             <input
-              type="text"
+              type="tel"
               class="form-control"
               id="phoneNumber"
               placeholder="+123456789"

@@ -2,10 +2,14 @@
 import MainLayout from "@/layouts/MainLayout.vue";
 import { Cart } from "@/types/carts/cart";
 import { useCart } from "@/services/CartService";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useToast } from "vue-toastification";
+import { useRouter } from "vue-router";
+import { createOrder } from "@/api/orderApi";
+import { getJwtPayload, getJwtToken, isAuthenticated } from "@/utils/security";
 
 const toast = useToast();
+const router = useRouter();
 const cartService = useCart();
 
 const cart = ref<Cart>({
@@ -17,6 +21,14 @@ const cart = ref<Cart>({
 
 const editingItemId = ref<number | null>(null);
 const quantity = ref<number | null>(null);
+
+const email = ref<string>("");
+const phoneNumber = ref<string>("");
+
+const disabled = computed(() => cart.value.items.length === 0);
+const authenticated = computed(() => {
+  return isAuthenticated();
+});
 
 async function getCart() {
   try {
@@ -87,6 +99,45 @@ function handleDecrease(itemId: number) {
 async function handleRemoveItem(id: number) {
   cart.value.items = cart.value.items.filter((i) => i.id !== id);
   await handleSaveChanges();
+}
+
+async function handleCheckout() {
+  const items = cart.value.items.map((item) => ({
+    productId: item.product.id,
+    quantity: item.quantity,
+  }));
+  let orderData;
+  let token;
+  if (isAuthenticated()) {
+    token = getJwtToken();
+    if (token) {
+      const payload = getJwtPayload(token);
+      if (payload) {
+        orderData = { customerId: payload.id, items };
+      }
+    }
+  }
+  if (!orderData) {
+    orderData = {
+      email: email.value,
+      phoneNumber: phoneNumber.value,
+      items,
+    };
+  }
+  try {
+    const response = await createOrder(orderData, token);
+    if (response.ok) {
+      toast.success("Order successfully created");
+      await router.push(`/`);
+    } else {
+      toast.error("Error creating order");
+      console.error(response.error);
+    }
+  } catch (error) {
+    toast.error("Error creating order");
+    console.error(error);
+  }
+  await cartService.emptyCart();
 }
 
 onMounted(async () => {
@@ -201,10 +252,57 @@ onMounted(async () => {
               <span>Total</span>
               <span class="text-danger">${{ cart.total }}</span>
             </div>
-            <button class="btn-minimal w-100 mb-2" @click="handleEmptyCart">
+            <hr class="my-3" />
+            <form
+              v-if="!authenticated"
+              @submit.prevent="handleCheckout"
+              class="mb-2"
+            >
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  v-model="email"
+                  autocomplete="email"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="phoneNumber" class="form-label">Phone</label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="phoneNumber"
+                  v-model="phoneNumber"
+                  autocomplete="tel"
+                  required
+                />
+              </div>
+              <button
+                :disabled="disabled"
+                type="submit"
+                class="btn-minimal w-100"
+              >
+                CHECKOUT
+              </button>
+            </form>
+            <button
+              v-else
+              :disabled="disabled"
+              class="btn-minimal w-100 mb-2"
+              @click="handleCheckout"
+            >
+              CHECKOUT
+            </button>
+            <button
+              :disabled="disabled"
+              class="btn-minimal w-100"
+              @click="handleEmptyCart"
+            >
               EMPTY CART
             </button>
-            <button class="btn-minimal w-100 mb-2">CHECKOUT</button>
           </div>
         </div>
       </div>

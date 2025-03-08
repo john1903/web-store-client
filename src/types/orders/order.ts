@@ -16,7 +16,9 @@ export interface Order {
 }
 
 export interface OrderRequest {
-  customerId: number;
+  customerId?: number;
+  email?: string;
+  phoneNumber?: string;
   items: OrderItemRequest[];
 }
 

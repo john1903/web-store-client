@@ -13,10 +13,20 @@ export function setToken(bearerToken: BearerToken, expiry: number) {
   setCookie("token", bearerToken.token, expiry);
 }
 
-export function getJwt(): BearerToken | null {
+export function getJwtToken(): BearerToken | undefined {
   const jwt = getCookie("token");
-  if (!jwt) return null;
+  if (!jwt) return undefined;
   return { token: jwt };
+}
+
+export function getJwtPayload(
+  bearerToken: BearerToken
+): JwtPayload | undefined {
+  try {
+    return jwtDecode<JwtPayload>(bearerToken.token);
+  } catch (error) {
+    return undefined;
+  }
 }
 
 export function getExpiry(bearerToken: BearerToken): number {
@@ -33,7 +43,7 @@ export function expireToken() {
 }
 
 function isTokenExpired(): boolean {
-  const jwt = getJwt();
+  const jwt = getJwtToken();
   if (!jwt) return true;
   try {
     const decoded = jwtDecode<JwtPayload>(jwt.token);
@@ -48,7 +58,7 @@ export function isAuthenticated(): boolean {
 }
 
 export function hasRole(role: string): boolean {
-  const jwt = getJwt();
+  const jwt = getJwtToken();
   if (!jwt) return false;
   try {
     const decoded = jwtDecode<JwtPayload>(jwt.token);

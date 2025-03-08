@@ -1,17 +1,21 @@
 import { CartItemRequest } from "@/types/carts/cartItem";
 import { Cart, CartRequest } from "@/types/carts/cart";
 import { addCartItem, emptyCart, fetchCart, updateCart } from "@/api/cartApi";
-import { BearerToken, getJwt, isAuthenticated } from "@/common/commonImports";
+import {
+  BearerToken,
+  getJwtToken,
+  isAuthenticated,
+} from "@/common/commonImports";
 import { fetchProduct } from "@/api/productApi";
 
 const LOCAL_STORAGE_KEY = "cart";
 
 export class CartService {
-  private readonly bearerToken: BearerToken | null;
+  private readonly bearerToken: BearerToken | undefined;
   private readonly userIsAuthenticated: boolean;
 
   constructor() {
-    this.bearerToken = getJwt();
+    this.bearerToken = getJwtToken();
     this.userIsAuthenticated = isAuthenticated();
   }
 

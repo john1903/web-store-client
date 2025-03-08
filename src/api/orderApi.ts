@@ -70,12 +70,18 @@ export async function fetchOrder(
 
 export async function createOrder(
   orderRequest: OrderRequest,
-  bearerToken: BearerToken
+  bearerToken?: BearerToken
 ): Promise<Result<IdResponse, ApiError>> {
   try {
-    const response = await api.post<IdResponse>(baseUrl, orderRequest, {
-      headers: getAuthHeaders(bearerToken),
-    });
+    const response = await api.post<IdResponse>(
+      baseUrl,
+      orderRequest,
+      bearerToken
+        ? {
+            headers: getAuthHeaders(bearerToken),
+          }
+        : undefined
+    );
     return { ok: true, data: response.data };
   } catch (error) {
     return handleError(error);
