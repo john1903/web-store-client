@@ -1,27 +1,16 @@
 import { CartItemRequest } from "@/types/carts/cartItem";
 import { Cart, CartRequest } from "@/types/carts/cart";
 import { addCartItem, emptyCart, fetchCart, updateCart } from "@/api/cartApi";
-import {
-  BearerToken,
-  getJwtToken,
-  isAuthenticated,
-} from "@/common/commonImports";
+import { getJwtToken, isAuthenticated } from "@/common/commonImports";
 import { fetchProduct } from "@/api/productApi";
 
 const LOCAL_STORAGE_KEY = "cart";
 
 export class CartService {
-  private readonly bearerToken: BearerToken | undefined;
-  private readonly userIsAuthenticated: boolean;
-
-  constructor() {
-    this.bearerToken = getJwtToken();
-    this.userIsAuthenticated = isAuthenticated();
-  }
-
   async getCart(): Promise<Cart> {
-    if (this.userIsAuthenticated && this.bearerToken) {
-      const response = await fetchCart(this.bearerToken);
+    const jwt = getJwtToken();
+    if (isAuthenticated() && jwt) {
+      const response = await fetchCart(jwt);
       if (response.ok) {
         return response.data;
       } else {
@@ -34,8 +23,10 @@ export class CartService {
   }
 
   async addCartItem(cartItemRequest: CartItemRequest): Promise<void> {
-    if (this.userIsAuthenticated && this.bearerToken) {
-      const response = await addCartItem(cartItemRequest, this.bearerToken);
+    const jwt = getJwtToken();
+    console.log(cartItemRequest);
+    if (isAuthenticated() && jwt) {
+      const response = await addCartItem(cartItemRequest, jwt);
       if (response.ok) {
         return;
       } else {
@@ -46,8 +37,9 @@ export class CartService {
   }
 
   async updateCart(cartRequest: CartRequest): Promise<void> {
-    if (this.userIsAuthenticated && this.bearerToken) {
-      const response = await updateCart(cartRequest, this.bearerToken);
+    const jwt = getJwtToken();
+    if (isAuthenticated() && jwt) {
+      const response = await updateCart(cartRequest, jwt);
       if (response.ok) {
         return;
       } else {
@@ -58,8 +50,9 @@ export class CartService {
   }
 
   async emptyCart(): Promise<void> {
-    if (this.userIsAuthenticated && this.bearerToken) {
-      const response = await emptyCart(this.bearerToken);
+    const jwt = getJwtToken();
+    if (isAuthenticated() && jwt) {
+      const response = await emptyCart(jwt);
       if (response.ok) {
         return;
       } else {

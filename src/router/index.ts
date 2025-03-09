@@ -50,8 +50,29 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/account",
     name: "account",
-    component: () => import("@/views/account/AccountView.vue"),
+    component: () => import("@/layouts/AccountLayout.vue"),
     meta: { requiresAuth: true },
+    children: [
+      {
+        path: "profile",
+        name: "profile",
+        component: () => import("@/views/account/ProfileView.vue"),
+      },
+      {
+        path: "orders",
+        name: "orders",
+        component: () => import("@/views/account/OrdersView.vue"),
+      },
+      {
+        path: "change-password",
+        name: "change-password",
+        component: () => import("@/views/account/ChangePasswordView.vue"),
+      },
+      {
+        path: "",
+        redirect: "/account/profile",
+      },
+    ],
   },
   {
     path: "/login",

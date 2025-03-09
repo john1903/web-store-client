@@ -3,21 +3,21 @@
 <template>
   <div class="modern-border">
     <RouterLink
-      to="/"
+      to="/account/profile"
       class="btn-minimal-2 fw-medium list-group-item list-group-item-action p-2 rounded"
     >
       Profile
     </RouterLink>
     <hr class="my-3" />
     <RouterLink
-      to="/"
+      to="/account/orders"
       class="btn-minimal-2 fw-medium list-group-item list-group-item-action p-2 rounded"
     >
       Orders
     </RouterLink>
     <hr class="my-3" />
     <RouterLink
-      to="/"
+      to="/account/change-password"
       class="btn-minimal-2 fw-medium list-group-item list-group-item-action p-2 rounded"
     >
       Change password
