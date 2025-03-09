@@ -15,7 +15,6 @@ const getBreadcrumbName = (segment: string) => {
 
 const breadcrumbItems = computed(() => {
   const pathSegments = route.path.split("/").filter((segment) => segment);
-  console.log(pathSegments);
   let fullPath = "";
 
   return [

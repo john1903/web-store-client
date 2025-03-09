@@ -1,7 +1,5 @@
 import axios from "axios";
-import { BearerToken } from "@/types/security/bearerToken";
-import { ApiError } from "@/types/exceptions/apiError";
-import { Result } from "@/types/common/result";
+import { ApiError, Result, BearerToken } from "@/common/commonImports";
 
 const BASE_URL = process.env.VUE_APP_API_URL || "http://localhost:3000";
 

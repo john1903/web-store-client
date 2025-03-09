@@ -12,7 +12,7 @@ import { Category } from "@/types/categories/category";
 import ProductsFilter from "@/components/ProductsFilter.vue";
 import ItemsPagination from "@/components/ItemsPagination.vue";
 import { ProductFilters } from "@/types/products/productFilters";
-import { PaginationParams } from "@/types/common/paginationParams";
+import { PaginationParams } from "@/common/commonImports";
 import { useCart } from "@/services/CartService";
 
 const toast = useToast();

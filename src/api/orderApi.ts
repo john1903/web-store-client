@@ -41,13 +41,10 @@ export async function fetchOrderCurrentUser(
   filters?: OrderFilters
 ): Promise<Result<PagedResponse<Order>, ApiError>> {
   try {
-    const response = await api.get<PagedResponse<Order>>(
-      `${baseUrl}/current-user`,
-      {
-        params: { ...paginationParams, ...filters },
-        headers: getAuthHeaders(bearerToken),
-      }
-    );
+    const response = await api.get<PagedResponse<Order>>(`${baseUrl}/current`, {
+      params: { ...paginationParams, ...filters },
+      headers: getAuthHeaders(bearerToken),
+    });
     return { ok: true, data: response.data };
   } catch (error) {
     return handleError(error);

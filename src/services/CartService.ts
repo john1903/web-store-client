@@ -24,7 +24,6 @@ export class CartService {
 
   async addCartItem(cartItemRequest: CartItemRequest): Promise<void> {
     const jwt = getJwtToken();
-    console.log(cartItemRequest);
     if (isAuthenticated() && jwt) {
       const response = await addCartItem(cartItemRequest, jwt);
       if (response.ok) {

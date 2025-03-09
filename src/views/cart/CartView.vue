@@ -6,7 +6,11 @@ import { computed, onMounted, ref } from "vue";
 import { useToast } from "vue-toastification";
 import { useRouter } from "vue-router";
 import { createOrder } from "@/api/orderApi";
-import { getJwtPayload, getJwtToken, isAuthenticated } from "@/utils/security";
+import {
+  getJwtPayload,
+  getJwtToken,
+  isAuthenticated,
+} from "@/common/commonImports";
 
 const toast = useToast();
 const router = useRouter();

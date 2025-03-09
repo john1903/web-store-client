@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import { isAuthenticated, hasRole } from "@/utils/security";
+import { isAuthenticated, hasRole } from "@/common/commonImports";
 import HomeView from "../views/HomeView.vue";
 
 const routes: Array<RouteRecordRaw> = [
@@ -62,6 +62,12 @@ const routes: Array<RouteRecordRaw> = [
         path: "orders",
         name: "orders",
         component: () => import("@/views/account/OrdersView.vue"),
+        props: (route) => ({
+          paginationParams: {
+            page: route.query.page ? Number(route.query.page) - 1 : undefined,
+            size: route.query.size ? Number(route.query.size) : 20,
+          },
+        }),
       },
       {
         path: "change-password",
