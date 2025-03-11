@@ -102,11 +102,13 @@ const breadcrumbItems = computed(() => {
   return baseItems;
 });
 
-onMounted(fetchData);
+onMounted(async () => {
+  await fetchData();
+});
 
 watch(
   () => [props.paginationParams, props.productsFilters],
-  () => fetchData(),
+  async () => await fetchData(),
   { deep: true }
 );
 </script>

@@ -1,4 +1,8 @@
-import { User, UserRequest } from "@/types/users/user";
+import {
+  User,
+  UpdateUserRequest,
+  ChangePasswordRequest,
+} from "@/types/users/user";
 import {
   PaginationParams,
   Result,
@@ -43,11 +47,26 @@ export async function fetchUser(
 
 export async function updateUser(
   id: number,
-  userRequest: UserRequest,
+  userRequest: UpdateUserRequest,
   bearerToken: BearerToken
 ): Promise<Result<undefined, ApiError>> {
   try {
     await api.put(`${baseUrl}/${id}`, userRequest, {
+      headers: getAuthHeaders(bearerToken),
+    });
+    return { ok: true, data: undefined };
+  } catch (error) {
+    return handleError(error);
+  }
+}
+
+export async function changePassword(
+  id: number,
+  changePasswordRequest: ChangePasswordRequest,
+  bearerToken: BearerToken
+): Promise<Result<undefined, ApiError>> {
+  try {
+    await api.put(`${baseUrl}/${id}/password`, changePasswordRequest, {
       headers: getAuthHeaders(bearerToken),
     });
     return { ok: true, data: undefined };

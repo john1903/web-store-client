@@ -1,5 +1,6 @@
 .modern-card {
     border: none;
+    box-shadow: 0 0 7px -3px rgba(170, 170, 170, 1);
     border-radius: 0;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;

@@ -5,6 +5,7 @@ import { User } from "@/types/users/user";
 import { getJwtPayload, getJwtToken } from "@/common/commonImports";
 import { BearerToken } from "@/types/security/bearerToken";
 import { useToast } from "vue-toastification";
+import { updateUser } from "@/api/userApi";
 
 const toast = useToast();
 
@@ -21,7 +22,29 @@ const jwtPayload = getJwtPayload(
 );
 
 async function handleUpdateUser() {
-  alert("Save changes");
+  if (jwtPayload && jwtToken) {
+    try {
+      const response = await updateUser(
+        jwtPayload.id,
+        {
+          email: user.value.email,
+          phoneNumber: user.value.phoneNumber,
+        },
+        jwtToken
+      );
+      if (response.ok) {
+        toast.success("User updated");
+      } else {
+        toast.error("Error updating user");
+        console.error(response.error);
+      }
+    } catch (error) {
+      toast.error("Error updating user");
+      console.error(error);
+    }
+  } else {
+    toast.error("Error updating user");
+  }
   editing.value = false;
 }
 

@@ -1,17 +1,21 @@
 <script setup lang="ts">
-import { ref, onMounted, defineProps, computed } from "vue";
+import { ref, onMounted, defineProps, computed, watch } from "vue";
 import { useToast } from "vue-toastification";
 import { Order } from "@/types/orders/order";
 import { fetchOrderCurrentUser } from "@/api/orderApi";
 import { getJwtToken, PaginationParams } from "@/common/commonImports";
+import ListPagination from "@/components/ListPagination.vue";
+import { useRouter } from "vue-router";
 
 const props = defineProps<{
   paginationParams: PaginationParams;
 }>();
 
+const router = useRouter();
 const toast = useToast();
 
 const orders = ref<Order[]>([]);
+const totalOrderPages = ref<number>(0);
 
 const jwtToken = getJwtToken();
 
@@ -19,7 +23,16 @@ const totalAmount = computed(() => {
   return orders.value.reduce((sum, order) => sum + order.total, 0);
 });
 
-onMounted(async () => {
+async function handlePageChanged(paginationParams: PaginationParams) {
+  await router.push({
+    name: "userOrders",
+    query: {
+      ...paginationParams,
+    },
+  });
+}
+
+async function fetchOrders() {
   if (jwtToken) {
     const response = await fetchOrderCurrentUser(
       jwtToken,
@@ -27,13 +40,25 @@ onMounted(async () => {
     );
     if (response.ok) {
       orders.value = response.data.content;
+      totalOrderPages.value = response.data.totalPages;
     } else {
       toast.error("Error fetching orders");
     }
   } else {
     toast.error("Error fetching orders");
   }
+}
+
+onMounted(async () => {
+  await fetchOrders();
 });
+
+watch(
+  () => props.paginationParams,
+  async () => {
+    await fetchOrders();
+  }
+);
 </script>
 
 <template>
@@ -71,6 +96,11 @@ onMounted(async () => {
         <i class="bi bi-emoji-frown fs-1 text-dark"></i>
         <p class="fw-bold">Nothing Found Here</p>
       </div>
+      <ListPagination
+        :total-pages="totalOrderPages"
+        :size="props.paginationParams.size"
+        @pageChanged="handlePageChanged"
+      />
     </div>
   </div>
 </template>

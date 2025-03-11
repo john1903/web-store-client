@@ -60,12 +60,12 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "orders",
-        name: "orders",
+        name: "userOrders",
         component: () => import("@/views/account/OrdersView.vue"),
         props: (route) => ({
           paginationParams: {
             page: route.query.page ? Number(route.query.page) - 1 : undefined,
-            size: route.query.size ? Number(route.query.size) : 20,
+            size: route.query.size ? Number(route.query.size) : 10,
           },
         }),
       },

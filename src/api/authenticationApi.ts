@@ -1,5 +1,5 @@
 import { LoginRequest } from "@/types/security/login";
-import { UserRequest } from "@/types/users/user";
+import { CreateUserRequest } from "@/types/users/user";
 import {
   Result,
   IdResponse,
@@ -27,7 +27,7 @@ export async function login(
 }
 
 export async function signup(
-  userRequest: UserRequest,
+  userRequest: CreateUserRequest,
   bearerToken?: BearerToken
 ): Promise<Result<IdResponse, ApiError>> {
   try {

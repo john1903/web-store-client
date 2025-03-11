@@ -1,12 +1,49 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { getJwtPayload, getJwtToken } from "@/utils/security";
+import { BearerToken } from "@/types/security/bearerToken";
+import { useToast } from "vue-toastification";
+import { changePassword } from "@/api/userApi";
+
+const toast = useToast();
 
 const currentPassword = ref("");
 const newPassword = ref("");
 const confirmPassword = ref("");
 
-function handleChangePassword() {
-  alert("Change password");
+const jwtToken = getJwtToken();
+const jwtPayload = getJwtPayload(
+  jwtToken ? jwtToken : ({ token: "" } as BearerToken)
+);
+
+async function handleChangePassword() {
+  if (newPassword.value !== confirmPassword.value) {
+    toast.error("Passwords do not match");
+    return;
+  }
+  if (jwtPayload && jwtToken) {
+    try {
+      const response = await changePassword(
+        jwtPayload.id,
+        {
+          currentPassword: currentPassword.value,
+          newPassword: newPassword.value,
+        },
+        jwtToken
+      );
+      if (response.ok) {
+        toast.success("Password changed");
+      } else {
+        toast.error("Error changing password");
+        console.error(response.error);
+      }
+    } catch (error) {
+      toast.error("Error changing password");
+      console.error(error);
+    }
+  } else {
+    toast.error("Error changing password");
+  }
 }
 </script>
 

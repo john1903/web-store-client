@@ -2,14 +2,14 @@
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import { UserRequest } from "@/types/users/user";
+import { CreateUserRequest } from "@/types/users/user";
 import { signup } from "@/api/authenticationApi";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 
 const toast = useToast();
 const router = useRouter();
 
-const userRequest = reactive<UserRequest>({
+const userRequest = reactive<CreateUserRequest>({
   email: "",
   phoneNumber: "",
   password: "",
